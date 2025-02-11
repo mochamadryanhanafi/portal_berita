@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./src/config/db');
 const authRoutes = require('./src/routes/auth.routes');
-const { authenticate } = require('./src/middleware/auth.middleware');
+const newsRoutes = require('./src/routes/news.routes'); // Tambah ini
 const { errorHandler } = require('./src/middleware/error.middleware');
 
 const app = express();
@@ -28,19 +28,12 @@ app.use(limiter);
 
 // Routes
 app.use('/auth', authRoutes);
-
-// Protected route example
-app.get('/profile', authenticate, (req, res) => {
-  res.json({
-    success: true,
-    user: req.user
-  });
-});
+app.use('/news', newsRoutes); // Tidak ada autentikasi
 
 // Error handling
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
